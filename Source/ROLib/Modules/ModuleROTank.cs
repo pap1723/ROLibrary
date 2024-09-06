@@ -292,7 +292,7 @@ namespace ROLib
             SetupKorolevCross();
             ROLStockInterop.UpdatePartHighlighting(part);
             //if (HighLogic.LoadedSceneIsEditor)
-                //GameEvents.onEditorShipModified.Fire(EditorLogic.fetch.ship);
+            //GameEvents.onEditorShipModified.Fire(EditorLogic.fetch.ship);
         }
 
         internal void ModelChangedHandlerWithSymmetry(bool pushNodes, bool symmetry)
@@ -794,7 +794,16 @@ namespace ROLib
         /// <summary>
         /// Calls the generic ROT procedural drag-cube updating routines.  Will update the drag cubes for whatever the current model state is.
         /// </summary>
-        private void UpdateDragCubes() => ROLModInterop.OnPartGeometryUpdate(part, true);
+        private void UpdateDragCubes() => ROLModInterop.OnPartGeometryUpdate(part, ShapeKey);
+
+        private string ShapeKey
+        { 
+            get
+            {
+                if (lengthWidth) return null;
+                return $"ROT|{currentDiameter}|{currentCore}|{currentVScale}|{currentNose}|{currentNoseVScale}|{currentNoseRotation}|{currentMount}|{currentMountVScale}|{currentMountRotation}";
+            }
+        }
 
         private void SetModelFromDimensions()
         {
