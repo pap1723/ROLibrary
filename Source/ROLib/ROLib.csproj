@@ -42,6 +42,9 @@
     <Reference Include="Assembly-CSharp">
       <Private>False</Private>
     </Reference>
+    <Reference Include="ROUtils">
+      <Private>False</Private>
+    </Reference>
     <Reference Include="System">
       <Private>False</Private>
     </Reference>
@@ -110,7 +113,6 @@
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="UI\ModelSelectionGUI.cs" />
     <Compile Include="UI\ModelWindow.cs" />
-    <Compile Include="Utils\ProceduralTools\DragCubeTool.cs" />
     <Compile Include="Utils\ModuleDefinitionVariantSet.cs" />
     <Compile Include="Utils\ROLAttachNodeUtils.cs" />
     <Compile Include="Utils\ROLConfigNodeUtils.cs" />

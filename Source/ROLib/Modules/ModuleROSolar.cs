@@ -322,8 +322,15 @@ namespace ROLib
                     prevScale = panelScale;
                 }
             };
+
             Fields[nameof(TechLevel)].uiControlEditor.onFieldChanged =
             Fields[nameof(TechLevel)].uiControlEditor.onSymmetryFieldChanged = (a, b) =>
+            {
+                ModelChangedHandler(true);
+            };
+
+            Fields[nameof(trackingToggle)].uiControlEditor.onFieldChanged =
+            Fields[nameof(trackingToggle)].uiControlEditor.onSymmetryFieldChanged = (a, b) =>
             {
                 ModelChangedHandler(true);
             };
@@ -445,7 +452,9 @@ namespace ROLib
         /// <summary>
         /// Calls the generic ROT procedural drag-cube updating routines.  Will update the drag cubes for whatever the current model state is.
         /// </summary>
-        private void UpdateDragCubes() => ROLModInterop.OnPartGeometryUpdate(part, true);
+        private void UpdateDragCubes() => ROLModInterop.OnPartGeometryUpdate(part, ShapeKey);
+
+        private string ShapeKey => lengthWidth ? $"ROS|{currentVariant}|{currentCore}|{panelWidth}|{panelLength}|{trackingToggle}" : $"ROS|{currentVariant}|{currentCore}|{panelScale}|{trackingToggle}";
 
         #endregion Custom Update Methods
 

@@ -1,9 +1,9 @@
 ﻿using System;
-using UnityEngine;
-using System.Reflection;
-using KSPShaderTools;
 using System.Linq;
-using ProceduralTools;
+using System.Reflection;
+using UnityEngine;
+using KSPShaderTools;
+using ROUtils;
 
 namespace ROLib
 {
@@ -30,21 +30,18 @@ namespace ROLib
 
         /// <summary>
         /// Updates part highlight renderer list, sends message to ModuleROTFlagDecal to update its renderer,
-        ///  sends message to FAR to update voxels, or if createDefaultCube==true will re-render the 'default' stock drag cube for the part<para/>
+        ///  sends message to FAR to update voxels
         /// Should be called anytime the model geometry in a part is changed -- either models added/deleted, procedural meshes updated.  Other methods exist for pure drag-cube updating in ROLStockInterop.
         /// </summary>
         /// <param name="part"></param>
-        /// <param name="createDefaultCube"></param>
-        public static void OnPartGeometryUpdate(Part part, bool createDefaultCube)
+        /// <param name="shapeKey">Key that uniquely idenfies the geometry of the part. Used for drag cube caching.</param>
+        public static void OnPartGeometryUpdate(Part part, string shapeKey = null)
         {
             if (!HighLogic.LoadedSceneIsEditor && !HighLogic.LoadedSceneIsFlight) { return; }//noop on prefabs
             ROLStockInterop.UpdatePartHighlighting(part);
             part.airlock = LocateAirlock(part);
             PartGeometryUpdate(part);
-            if (createDefaultCube)
-                DragCubeTool.UpdateDragCubes(part);
-            else if (IsFARInstalled()) // DragCubeTool calls this.
-                part.SendMessage("GeometryPartModuleRebuildMeshData");
+            DragCubeTool.UpdateDragCubes(part, shapeKey);
             if (HighLogic.LoadedSceneIsEditor && part.parent == null && part != EditorLogic.RootPart) //likely the part under the cursor; this fixes problems with modular parts not wanting to attach to stuff
             {
                 part.gameObject.SetLayerRecursive(1, 2097152);//1<<21 = Part Triggers get skipped by the relayering (hatches, ladders, ??)
